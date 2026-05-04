@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ランチ決定</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background: #F2F2F7; display: flex; justify-content: center; padding: 20px; margin: 0; }
+        .container { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 350px; text-align: center; }
+        h1 { color: #1C1C1E; font-size: 1.2rem; }
+        #result { font-size: 1.8rem; font-weight: bold; color: #FF9500; margin: 20px 0; min-height: 80px; border: 2px solid #E5E5EA; border-radius: 15px; display: flex; align-items: center; justify-content: center; background: #FAFAFA; }
+        .btn-main { background: #34C759; color: white; border: none; padding: 15px 0; width: 100%; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
+        .admin { border-top: 1px solid #E5E5EA; padding-top: 20px; text-align: left; }
+        .input-group { display: flex; gap: 8px; margin-bottom: 10px; }
+        input { flex: 1; padding: 10px; border: 1px solid #C7C7CC; border-radius: 8px; font-size: 16px; }
+        .btn-add { background: #007AFF; color: white; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; }
+        .shop-list { list-style: none; padding: 0; max-height: 200px; overflow-y: auto; }
+        .shop-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #F2F2F7; font-size: 0.9rem; align-items: center; }
+        .btn-del { color: #FF3B30; border: none; background: none; font-size: 1.2rem; padding: 5px 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🍴 今日のランチ</h1>
+    <div id="result">準備OK</div>
+    <button class="btn-main" onclick="spin()">ガチャを回す！</button>
+    <div class="admin">
+        <div class="input-group">
+            <input type="text" id="new-shop" placeholder="お店の名前...">
+            <button class="btn-add" onclick="addShop()">追加</button>
+        </div>
+        <ul id="shop-list-display" class="shop-list"></ul>
+    </div>
+</div>
+<script>
+    let shops = JSON.parse(localStorage.getItem('lunch_v3')) || ["吉野家", "サイゼリヤ", "マクドナルド"];
+    function save() { localStorage.setItem('lunch_v3', JSON.stringify(shops)); render(); }
+    function render() {
+        const list = document.getElementById('shop-list-display');
+        list.innerHTML = shops.map((s, i) => `<li class="shop-item">${s}<button class="btn-del" onclick="del(${i})">×</button></li>`).join('');
+    }
+    function addShop() {
+        const input = document.getElementById('new-shop');
+        if (input.value.trim()) { shops.push(input.value.trim()); input.value = ""; save(); }
+    }
+    function del(i) { shops.splice(i, 1); save(); }
+    function spin() {
+        if (shops.length === 0) return alert("お店を登録してね");
+        let c = 0;
+        const t = setInterval(() => {
+            document.getElementById('result').innerText = shops[Math.floor(Math.random() * shops.length)];
+            if (++c > 12) { clearInterval(t); document.getElementById('result').innerText = "📍 " + shops[Math.floor(Math.random() * shops.length)]; }
+        }, 60);
+    }
+    render();
+</script>
+</body>
+</html>
