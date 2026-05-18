@@ -33,7 +33,7 @@
     </div>
 </div>
 <script>
-    let shops = JSON.parse(localStorage.getItem('lunch_v3')) || ["吉野家", "サイゼリヤ", "マクドナルド"];
+    let shops = JSON.parse(localStorage.getItem('lunch_v3')) || ["森野カレー", "アジ韓", "裏中華", "ドテ", "ダダ", "関西おばんざい", "大村パスタ", "金城", "彦三", "彦三裏中華", "角丸", "味噌煮込み", "タイ料理"];
     function save() { localStorage.setItem('lunch_v3', JSON.stringify(shops)); render(); }
     function render() {
         const list = document.getElementById('shop-list-display');
